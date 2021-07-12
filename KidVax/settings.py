@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 'django-insecure-$**vs7rd+67cns&dq#-6n4$_tni96u5sxj_*^bqa!5g%%a^@q#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool,  default=True)
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     
     # 3rd Party
+    'drf_yasg',
     'rest_framework',
     'drf_multiple_model',
     'rest_framework.authtoken',
@@ -71,6 +72,11 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],    
 }
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'KidVacc.serializers.UserParentUpdateSerializer',
+}
+LOGIN_REDIRECT_URL = 'child'
+LOGIN_URL = 'http://localhost:8000/api/child/rest-auth/login'
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'KidVacc.serializers.UserParentUpdateSerializer',
@@ -122,8 +128,61 @@ CORS_ALLOW_HEADERS = [
     'authentication',
 ]
 
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'KidVacc.serializers.UserParentUpdateSerializer',
+}
+LOGIN_REDIRECT_URL = 'child'
+LOGIN_URL = 'http://localhost:8000/rest-auth/login'
+
+# Enable CORS on all Origin
+
+# CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_PREFLIGHT_MAX_AGE = 86400
+
+CORS_REPLACE_HTTPS_REFERER = True
+
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://www.website.com",
+    "http://localhost:3000",
+    "http://localhost:4200",
+    "https://web.postman.co",
+    "https://kidvacc.herokuapp.com",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:5500",
+]
+
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'authentication',
+]
+
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
